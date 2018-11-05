@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Квадрат Декарта</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.min.js"></script>
+</head>
+<body>
+    
+    <div id="app">
+       
+        <div class="header">
+            <h1 class="center">Квадрат Декарта</h1>
+            
+            <div class="center">
+                <h2 v-if="(positive_yes.length - negative_yes.length) == (positive_no.length - negative_no.length)">
+                    Ситуация затруднительна ( {{positive_yes.length - negative_yes.length}} = {{positive_no.length - negative_no.length}} )
+                </h2>
+
+                <h2 v-if="(positive_yes.length - negative_yes.length) > (positive_no.length - negative_no.length)" class="green">
+                    Судя по всему, это решение стоит принять ( {{positive_yes.length - negative_yes.length}} > {{positive_no.length - negative_no.length}} )
+                </h2>
+
+                <h2 v-if="(positive_yes.length - negative_yes.length) < (positive_no.length - negative_no.length)" class="red">
+                    Судя по всему, это решение не стоит принимать ( {{positive_yes.length - negative_yes.length}} < {{positive_no.length - negative_no.length}} )
+                </h2>
+            </div>
+            
+            <div v-if="debug">
+                {{positive_yes}}
+                {{positive_no}}
+                {{negative_yes}}
+                {{negative_no}}
+                {{inputs}}
+            </div>
+        </div>
+        
+        <hr>
+        
+        <div class="table">
+            <div class="square">
+                <h3>Что будет хорошего, если это произойдёт? ({{positive_yes.length}})</h3>
+                <p v-for="item in positive_yes" class="green">+ {{item}}</p>
+                <input type="text" @keyup.enter="add_item('positive_yes')" v-model="inputs.positive_yes">
+                <button @click="add_item('positive_yes')">Добавить</button>
+            </div>
+
+            <div class="square">
+                <h3>Что будет хорошего, если это НЕ произойдёт? ({{positive_no.length}})</h3>
+                <p v-for="item in positive_no" class="green">+ {{item}}</p>
+                <input type="text" @keyup.enter="add_item('positive_no')" v-model="inputs.positive_no">
+                <button @click="add_item('positive_no')">Добавить</button>
+            </div>
+
+            <div class="square">
+                <h3>Что будет плохого, если это произойдёт? ({{negative_yes.length}})</h3>
+                <p v-for="item in negative_yes" class="red">- {{item}}</p>
+                <input type="text" @keyup.enter="add_item('negative_yes')" v-model="inputs.negative_yes">
+                <button @click="add_item('negative_yes')">Добавить</button>
+            </div>
+
+            <div class="square">
+                <h3>Что будет плохого, если это НЕ произойдёт? ({{negative_no.length}})</h3>
+                <p v-for="item in negative_no" class="red">- {{item}}</p>
+                <input type="text" @keyup.enter="add_item('negative_no')" v-model="inputs.negative_no">
+                <button @click="add_item('negative_no')">Добавить</button>
+            </div>
+        </div>
+        
+    </div>
+    
+</body>
+</html>
+
+<script>
+
+var app = new Vue({
+    el: '#app',
+    data: {
+        debug: false,
+        positive_yes: [],
+        positive_no: [],
+        negative_yes: [],
+        negative_no: [],
+        inputs: {
+            positive_yes: "",
+            positive_no: "",
+            negative_yes: "",
+            negative_no: "",
+        }
+    },
+    methods: {
+        add_item: function(type) {
+            this[type].push( this.inputs[type] );
+            this.inputs[type] = '';
+        }
+    }
+})
+
+</script>
+
+
+<style>
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #111;
+    color: white;
+    font-family: Verdana;
+}
+
+#app {
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+.center {
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+.table {
+    text-align: center;
+}
+
+.square {
+    width: 350px;
+    display: inline-block;
+    margin-bottom: 20px;
+    vertical-align: top;
+}
+
+h3 {
+    padding-bottom: 10px;
+}
+
+button, input {
+    width: 100%;
+    background-color: #222;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin-bottom: 4px;
+}
+
+input {
+    width: calc( 100% - 22px );
+}
+
+.green {
+    color: lime;
+}
+
+.red {
+    color: crimson;
+}
+    
+</style>
